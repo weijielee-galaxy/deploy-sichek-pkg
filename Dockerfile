@@ -14,10 +14,4 @@ WORKDIR /opt
 COPY ${RUN_FILE} /opt/${RUN_FILE}
 RUN chmod +x /opt/${RUN_FILE}
 
-CMD ["/bin/bash", "-c", "\
-    set -eux; \
-    cp /opt/${RUN_FILE} /host/tmp/${RUN_FILE}; \
-    chmod +x /host/tmp/${RUN_FILE}; \
-    chroot /host /bin/bash /tmp/${RUN_FILE}; \
-    tail -f /dev/null \
-    "]
+ENTRYPOINT ["/bin/bash", "-c", "tail -f /dev/null"]

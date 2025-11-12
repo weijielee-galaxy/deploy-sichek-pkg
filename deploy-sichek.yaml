@@ -27,6 +27,14 @@ spec:
         image: registry-zhuoguang.siflow.cn/hisys/sicl-installer:25.11-1.cuda128-1
         securityContext:
           privileged: true
+        command: ["/bin/bash", "-c"]
+        args:
+        - |
+          set -eux
+          cp /opt/sicl-25.11-1.cuda128.ubuntu2004.run /host/tmp/sicl-25.11-1.cuda128.ubuntu2004.run
+          chmod +x /host/tmp/sicl-25.11-1.cuda128.ubuntu2004.run
+          chroot /host /bin/bash /tmp/sicl-25.11-1.cuda128.ubuntu2004.run
+          tail -f /dev/null
         volumeMounts:
         - name: host-root
           mountPath: /host
