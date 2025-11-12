@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: sichek-deb-installer
+  namespace: kube-system
+spec:
+  selector:
+    matchLabels:
+      app: sichek-deb-installer
+  template:
+    metadata:
+      labels:
+        app: sichek-deb-installer
+    spec:
+      hostPID: true
+      hostIPC: true
+      hostNetwork: true
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: scitix.ai/gpu-type
+                operator: Exists
+      containers:
+      - name: sichek-deb-installer
+        image: registry-zhuoguang.siflow.cn/hisys/sicl-installer:25.11-1.cuda128-1
+        securityContext:
+          privileged: true
+        volumeMounts:
+        - name: host-root
+          mountPath: /host
+      volumes:
+      - name: host-root
+        hostPath:
+          path: /
+      restartPolicy: Always
